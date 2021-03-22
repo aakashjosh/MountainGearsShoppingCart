@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+<on-start>
+	<evaluate expression="carthandler.initflow()" result="flowScope.shippingdetails" />
+</on-start>
+
+<view-state id="start" view="userdetails" model="flowScope.shippingdetails">
+<transition on="submit" to="validate"></transition>
+</view-state>
+
+<action-state id="validate">
+	<evaluate expression="carthandler.validateDetails(shippingdetails,messageContext)"></evaluate>
+		<transition on="success" to="confirmDetails" />
+		<transition on="failure" to="start" />
+</action-state>
+
+<view-state id="confirmDetails" view="confirmshipping" model="flowScope.shippingdetails">
+		<transition on="edit" to="start" />
+		<transition on="submit" to="savedetails" />
+	</view-state>
+	
+	<action-state id="savedetails">
+	<evaluate expression="carthandler.savedetails(shippingdetails,messageContext)"></evaluate>
+		<transition on="success" to="thanku" />
+</action-state>
+
+<view-state id="thanku" view="thankyou" model="flowScope.shippingdetails">
+		<transition on="submit" to="welcome" />
+	</view-state>
+
+
+	
+	<end-state id="welcome" view="index" />
+	
+
+	<end-state id="toException"
+		view="externalRedirect:contextRelative:exception.jsp" />
+
+	<!-- these events are available in every state -->
+	<global-transitions>
+		
+		<transition on="error" to="toException" />
+	</global-transitions>
+</flow>

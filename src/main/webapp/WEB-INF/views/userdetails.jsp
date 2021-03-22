@@ -1,0 +1,174 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicon.css" rel="stylesheet">
+<title>Shipping Details</title>
+</head>
+<body>
+
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header"></div>
+
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="home">Home</a></li>
+				<li><a href="#"></a></li>
+				<a class="navbar-brand" rel="home" href="#">
+						<img style="max-width: 150px; margin-top: -7px;"
+							src="https://jimbierly.files.wordpress.com/2014/09/mountain-gear-logo2.png">
+				</a>
+
+				<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">Explore Items<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><c:forEach items="${category}" var="category">
+								<li><a
+									href="<c:url value='/?name=${category.category_name}' />">${category.category_name}</a>
+								</li>
+						</c:forEach></li>
+						</ul></li>
+
+			</ul>
+			
+
+	<ul class="nav nav navbar-nav navbar-right">
+	<c:choose>
+				<c:when test="${empty loggedinuser or loggedout==true}">
+					<li>
+						<a id="SIGN IN" href="loginhere"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;SIGN IN</a>
+						</li>
+					<li>
+						<a id="Register" href="registerhere"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;REGISTER</a>
+						</li>
+				</c:when>	
+				<c:when test="${!empty loggedinuser}">
+				<li> <a id="loggedin" href="#">WELCOME ${loggedinuser}</a>
+					</li>
+				<li> <a id="logout" href="logout"> <span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;LOGOUT</a>
+					</li>
+				
+					
+					
+					<li> <a id="cart" href="add_cart"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;&nbsp;cart(${cartsize})</a>
+					</li>
+				</c:when>
+			</c:choose>
+	</ul>
+			
+
+
+		</div>
+	</nav>
+	<div class="container" style='background-color: teal;'>
+		<div class="wrapper">
+			<form:form modelAttribute="shippingdetails">
+				<center>
+					<h3 class="form-signin-heading" style='color: Red'>Please Enter your details..!!</h3>
+
+					<hr>
+					<br>
+					<table>
+			
+						<tr>
+							<td><form:label path="send_to" style='color:White'>Send to:</form:label></td>
+							<td><form:input path="send_to"  /></td>
+							<td><c:forEach
+									items="${flowRequestContext.messageContext.getMessagesBySource('send_to')}"
+									var="err">
+									<div>
+										<span>${err.text}</span>
+									</div>
+								</c:forEach></td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td><form:label path="email" style='color:White'>Email:</form:label></td>
+							<td><form:input path="email"  /></td>
+							<td><c:forEach
+									items="${flowRequestContext.messageContext.getMessagesBySource('email')}"
+									var="err">
+									<div>
+										<span>${err.text}</span>
+									</div>
+								</c:forEach></td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td><form:label path="contact_number"
+									style='color:white'>Contact Number:</form:label></td>
+							<td><form:input path="contact_number"  /></td>
+							<td><c:forEach
+									items="${flowRequestContext.messageContext.getMessagesBySource('contact_number')}"
+									var="err">
+									<div>
+										<span>${err.text}</span>
+									</div>
+								</c:forEach></td>
+
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td><form:label path="address" style='color:white'>Address:</form:label></td>
+							<td><form:input path="address" /></td>
+							<td><c:forEach
+									items="${flowRequestContext.messageContext.getMessagesBySource('address')}"
+									var="err">
+									<div>
+										<span>${err.text}</span>
+									</div>
+								</c:forEach></td>
+
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td><form:radiobutton path="mode_of_payment" value="Online banking"/>Online banking
+							<form:radiobutton path="mode_of_payment" value="Cash on delivery" />Cash on delivery
+							<td><c:forEach
+									items="${flowRequestContext.messageContext.getMessagesBySource('mode_of_payment')}"
+									var="err">
+									<div>
+										<span>${err.text}</span>
+									</div>
+								</c:forEach></td>
+							
+						<tr>
+						<tr>
+							<td>&nbsp;</td>
+							<td><input class="btn btn-warning" name="_eventId_submit"
+								type="submit" value="Confirm data" />
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+						</tr>
+					</table>
+				</center>
+			</form:form>
+		</div>
+	</div>
+</body>
+</html>
